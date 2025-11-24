@@ -65,6 +65,16 @@ lms-backend/
 │── controllers/
 │     ├── authController.js
 │     └── courseController.js
+│── .env
+
+
+
+use env in .env:
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=password
+DB_NAME=lms
+JWT_SECRET=supersecretkey123
 
 
 

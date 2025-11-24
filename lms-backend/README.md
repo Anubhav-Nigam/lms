@@ -79,3 +79,22 @@ JWT_SECRET=supersecretkey123
 
 
 
+All roles:
+
+👨‍💼 Admin
+
+GET /api/admin/users
+
+👨‍🏫 Instructor
+
+POST /api/courses/create
+
+GET /api/courses/my
+
+👨‍🎓 Student
+
+GET /api/courses
+
+POST /api/enroll/:courseId
+
+GET /api/enroll/my

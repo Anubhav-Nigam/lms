@@ -36,3 +36,32 @@ export const login = (req, res) => {
     });
   });
 };
+
+export const registerUser = (req, res) => {
+  const { name, email, password, role } = req.body;
+
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ message: "All fields required" });
+  }
+
+  // check existing user
+  const checkUser = `SELECT * FROM users WHERE email = ?`;
+
+  db.query(checkUser, [email], (err, results) => {
+    if (err) return res.status(500).json({ message: "DB error" });
+
+    if (results.length > 0)
+      return res.status(400).json({ message: "Email already exists" });
+
+    // hash password
+    const hashed = bcrypt.hashSync(password, 10);
+
+    const sql = `INSERT INTO users (name, email, password, role) VALUES (?,?,?,?)`;
+
+    db.query(sql, [name, email, hashed, role], (err2) => {
+      if (err2) return res.status(500).json({ message: "Error inserting user" });
+
+      return res.json({ message: "User registered successfully" });
+    });
+  });
+};

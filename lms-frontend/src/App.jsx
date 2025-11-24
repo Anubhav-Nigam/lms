@@ -1,4 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+
 import AuthProvider from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
@@ -27,103 +30,118 @@ import MyEnrollments from "./pages/student/MyEnrollments";
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <AppRoutes />
+    </AuthProvider>
+  );
+}
 
-        <Navbar />
+function AppRoutes() {
+  const { user, loading } = useContext(AuthContext);
 
-        <Routes>
+  if (loading) return <div>Loading...</div>;
 
-          {/* Public Routes */}
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+  return (
+    <BrowserRouter>
+      <Navbar />
+
+      <Routes>
+
+        {/* Root → auto redirect if user exists */}
+        <Route
+          path="/"
+          element={
+            user ? <Navigate to="/dashboard" /> : <Login />
+          }
+        />
+
+        <Route path="/register" element={<Register />} />
 
           {/* Common Dashboard after login */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={["admin", "instructor", "student"]}>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "instructor", "student"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
           {/* ========== ADMIN ROUTES ========== */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminUsers />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
 
           {/* ========== INSTRUCTOR ROUTES ========== */}
-          <Route
-            path="/instructor"
-            element={
-              <ProtectedRoute allowedRoles={["instructor"]}>
-                <InstructorDashboard />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/instructor"
+          element={
+            <ProtectedRoute allowedRoles={["instructor"]}>
+              <InstructorDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/instructor/create-course"
-            element={
-              <ProtectedRoute allowedRoles={["instructor"]}>
-                <CreateCourse />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/instructor/create-course"
+          element={
+            <ProtectedRoute allowedRoles={["instructor"]}>
+              <CreateCourse />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/instructor/my-courses"
-            element={
-              <ProtectedRoute allowedRoles={["instructor"]}>
-                <MyCourses />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/instructor/my-courses"
+          element={
+            <ProtectedRoute allowedRoles={["instructor"]}>
+              <MyCourses />
+            </ProtectedRoute>
+          }
+        />
 
           {/* ========== STUDENT ROUTES ========== */}
-          <Route
-            path="/student"
-            element={
-              <ProtectedRoute allowedRoles={["student"]}>
-                <StudentDashboard />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/student"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/student/courses"
-            element={
-              <ProtectedRoute allowedRoles={["student"]}>
-                <AllCourses />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/student/courses"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <AllCourses />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/student/enrollments"
-            element={
-              <ProtectedRoute allowedRoles={["student"]}>
-                <MyEnrollments />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/student/enrollments"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <MyEnrollments />
+            </ProtectedRoute>
+          }
+        />
 
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </Routes>
+    </BrowserRouter>
   );
 }

@@ -42,13 +42,6 @@ CREATE TABLE enrollments (
 
 
 
-INSERT INTO users (name,email,password,role) VALUES
-('Admin User','admin@test.com','$2a$10$ZRuJviGwyVP8jxghMhbMZ.8sTjzFgFZ4gPglv931aZcDToBJ8jpUu','admin'),
-('Instructor User','ins@test.com','$2a$10$ZRuJviGwyVP8jxghMhbMZ.8sTjzFgFZ4gPglv931aZcDToBJ8jpUu','instructor'),
-('Student User','student@test.com','$2a$10$ZRuJviGwyVP8jxghMhbMZ.8sTjzFgFZ4gPglv931aZcDToBJ8jpUu','student');
-
-
-
 
 ## Project Structure:
 lms-backend/
